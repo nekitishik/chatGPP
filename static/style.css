@@ -1,0 +1,56 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(blue, yellow);
+    display: flex;
+    flex-direction: column;
+}
+
+main{
+    flex-grow: 1;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+
+.message{
+    background: linear-gradient(blue, yellow);
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    color: red;
+}
+
+header{
+    background-color: palevioletred;
+    color: white;
+    text-align: center;
+    padding: 0.3rem;
+}
+
+.form {
+    display: flex;
+}
+
+.form input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border: none;
+}
+
+.form button {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border: none;
+    background-color: palevioletred;
+    color: white;
+    cursor: pointer;
+}
