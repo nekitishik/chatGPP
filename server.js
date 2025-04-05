@@ -3,6 +3,7 @@ let db = require('./db')
 let http = require('http')
 let path = require('path')
 let fs = require('fs')
+let { Server } = require('socket.io')
 
 let pathToIndex = path.join(__dirname, 'static', 'index.html')
 let index = fs.readFileSync(pathToIndex, "utf-8")
@@ -13,7 +14,7 @@ let style = fs.readFileSync(pathToStyle, "utf-8")
 let pathToScript = path.join(__dirname, 'static', 'script.js')
 let script = fs.readFileSync(pathToScript, "utf-8")
 
-http.createServer((req, res) => {
+let ser = http.createServer((req, res) => {
     switch(req.url){
         case "/":
             res.writeHead(200, {'Content-Type': 'text/html'})
@@ -33,3 +34,18 @@ http.createServer((req, res) => {
 
     }
 }).listen(3000, () =>console.log('Меня звать Борат!'))
+
+let io = new Server(ser);
+
+let messages = []
+
+io.on("connection", function(socket){
+    console.log(socket.id)
+    socket.on("message", (data)=>{
+    console.log(data)
+    messages.push(data)
+    socket.emit("update", JSON.stringify(messages))
+})
+})
+
+
