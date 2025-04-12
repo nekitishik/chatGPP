@@ -15,37 +15,37 @@ let pathToScript = path.join(__dirname, 'static', 'script.js')
 let script = fs.readFileSync(pathToScript, "utf-8")
 
 let ser = http.createServer((req, res) => {
-    switch(req.url){
+    switch (req.url) {
         case "/":
-            res.writeHead(200, {'Content-Type': 'text/html'})
+            res.writeHead(200, { 'Content-Type': 'text/html' })
             res.end(index)
             break;
         case "/style.css":
-                res.writeHead(200, {'Content-Type': 'text/css'})
-                res.end(style)
-                break;
+            res.writeHead(200, { 'Content-Type': 'text/css' })
+            res.end(style)
+            break;
         case "/script.js":
-                    res.writeHead(200, {'Content-Type': 'text/js'})
-                    res.end(script)
-                    break;
+            res.writeHead(200, { 'Content-Type': 'text/js' })
+            res.end(script)
+            break;
         default:
-            res.writeHead(404, {'Content-Type': 'text/html'})
+            res.writeHead(404, { 'Content-Type': 'text/html' })
             res.end("<h1>404</h1>")
 
     }
-}).listen(3000, () =>console.log('Меня звать Борат!'))
+}).listen(3000, () => console.log('Меня звать Борат!'))
 
 let io = new Server(ser);
 
 let messages = []
 
-io.on("connection", function(socket){
+io.on("connection", function (socket) {
     console.log(socket.id)
-    socket.on("message", (data)=>{
-    console.log(data)
-    messages.push(data)
-    socket.emit("update", JSON.stringify(messages))
-})
+    socket.on("message", (data) => {
+        console.log(data)
+        messages.push(data)
+        socket.emit("update", JSON.stringify(messages))
+    })
 })
 
-
+db.getUsers().then(res=>console.log(res)).catch(err=>console.log(err))

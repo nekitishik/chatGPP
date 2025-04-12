@@ -17,5 +17,5 @@ socket.on("update", function(data){
             message = JSON.parse(message)
             return `<div class="message">${message.name}: ${message.text}</div>`
         }
-    )
+    ).join("")
 })
