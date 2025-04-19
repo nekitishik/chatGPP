@@ -39,13 +39,21 @@ let io = new Server(ser);
 
 let messages = []
 
-io.on("connection", function (socket) {
+io.on("connection", function(socket) {
     console.log(socket.id)
+    db.getMessages().then(messages => {
+        socket.emit("update", JSON.stringify(messages))
+    }).catch(err => console.log(err))+
     socket.on("message", (data) => {
         console.log(data)
-        messages.push(data)
-        socket.emit("update", JSON.stringify(messages))
+        db.addMessage(data.text, data.name).then(res => {
+            socket.emit("update", JSON.stringify(res))
+        }).catch(err => console.log(err))
     })
 })
 
-db.getUsers().then(res=>console.log(res)).catch(err=>console.log(err))
+// db.getUsers().then(res=>console.log(res)).catch(err=>console.log(err))
+
+// db.getMessages().then(res=>console.log(res)).catch(err=>console.log(err.message))
+
+// db.addMessage("hello", 2).then(res=>console.log(res)).catch(err=>console.log(err))
