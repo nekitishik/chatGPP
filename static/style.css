@@ -55,3 +55,36 @@ header{
     color: white;
     cursor: pointer;
 }
+
+main.register{
+    justify-content: center;
+    align-items: center;
+}
+
+.register form{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: palevioletred;
+    color: white;
+    border-radius: 0.3rem;
+
+}
+
+label, button{
+    margin-top: 1rem;
+    
+}
+
+form input{
+    padding: 0.3rem;
+
+}
+
+form button{
+    padding: 0.3rem;
+    background-color: white;
+    color: palevioletred;
+
+}

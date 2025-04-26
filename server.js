@@ -14,6 +14,12 @@ let style = fs.readFileSync(pathToStyle, "utf-8")
 let pathToScript = path.join(__dirname, 'static', 'script.js')
 let script = fs.readFileSync(pathToScript, "utf-8")
 
+let pathToRegister = path.join(__dirname, 'static', 'register.html')
+let register = fs.readFileSync(pathToRegister, "utf-8")
+
+let pathToAuth = path.join(__dirname, 'static', 'auth.js')
+let auth = fs.readFileSync(pathToAuth, "utf-8")
+
 let ser = http.createServer((req, res) => {
     switch (req.url) {
         case "/":
@@ -23,6 +29,14 @@ let ser = http.createServer((req, res) => {
         case "/style.css":
             res.writeHead(200, { 'Content-Type': 'text/css' })
             res.end(style)
+            break;
+        case "/register":
+            res.writeHead(200, { 'Content-Type': 'text/html' })
+            res.end(register)
+            break;
+        case "/auth.js":
+            res.writeHead(200, { 'Content-Type': 'text/js' })
+            res.end(auth)
             break;
         case "/script.js":
             res.writeHead(200, { 'Content-Type': 'text/js' })
@@ -39,16 +53,17 @@ let io = new Server(ser);
 
 let messages = []
 
-io.on("connection", function(socket) {
+io.on("connection", async function(socket) {
     console.log(socket.id)
-    db.getMessages().then(messages => {
-        socket.emit("update", JSON.stringify(messages))
-    }).catch(err => console.log(err))+
-    socket.on("message", (data) => {
-        console.log(data)
-        db.addMessage(data.text, data.name).then(res => {
-            socket.emit("update", JSON.stringify(res))
-        }).catch(err => console.log(err))
+    let messages = await db.getMessages();
+        messages = messages.map(m=>({name: m.login, text: m.content}))
+        io.emit("update", JSON.stringify(messages))
+    socket.on("message",async (data) => {
+        data = JSON.parse(data)
+        await db.addMessage(data.text, 2)
+        let messages = await db.getMessages();
+        messages = messages.map(m=>({name: m.login, text: m.content}))
+        io.emit("update", JSON.stringify(messages))
     })
 })
 
